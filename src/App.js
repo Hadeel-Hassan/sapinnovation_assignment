@@ -1,6 +1,5 @@
 import { Button } from "react-bootstrap";
 import React, { Component, Fragment } from "react";
-import ReactDOM from "react-dom";
 import Select from "react-select";
 import firebase from "./firebase";
 import "bootstrap/dist/css/bootstrap.min.css";
