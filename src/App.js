@@ -1,10 +1,7 @@
 import { ListGroup } from "react-bootstrap";
 import React, { Component, Fragment } from "react";
-import ReactDOM from "react-dom";
-import Select from "react-select";
 import firebase from "./firebase";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { render } from "@testing-library/react";
 <link
   rel="stylesheet"
   href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -17,6 +14,8 @@ export default class App extends Component {
     data: [],
     select_list: [],
   };
+
+  // ======================================= Get first Categories =======================================
   async getInitialCollection() {
     var options_array = [];
     const db = firebase.firestore();
@@ -42,6 +41,8 @@ export default class App extends Component {
     return options_array;
   }
 
+
+  // ======================================= Search for a category and fetch it =======================================
   async getCollection(collection) {
     const db = firebase.firestore();
     var options_array = [];
@@ -78,6 +79,8 @@ export default class App extends Component {
     }
   }
 
+
+  // ======================================= Search for a category and fetch it =======================================
   async getDocument(document) {
     var options_array = [];
     const db = firebase.firestore();
@@ -95,6 +98,8 @@ export default class App extends Component {
     return options_array
   }
 
+
+  // ======================================= Add a new category =======================================
   async addCollection(collection) {
     const db = firebase.firestore();
     const data = {
@@ -109,6 +114,8 @@ export default class App extends Component {
     return new_collection;
   }
 
+
+  // ======================================= Handling after selecting an option =======================================
   _handleSelect = (event) => {
     this.handleSelect(event.target.value);
   };
@@ -131,10 +138,7 @@ export default class App extends Component {
   };
 
   async componentDidMount() {
-    // if (this.state.data.length == 0) {
-    this.setState({ data: await this.getInitialCollection() });
-    // }
-
+    this.setState({ data: await this.getInitialCollection() })
   }
 
   render() {
