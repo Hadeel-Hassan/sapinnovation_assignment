@@ -1,354 +1,186 @@
-import { Button } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 import React, { Component, Fragment } from "react";
+import ReactDOM from "react-dom";
 import Select from "react-select";
 import firebase from "./firebase";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { render } from "@testing-library/react";
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+  crossorigin="anonymous"
+></link>;
 
 export default class App extends Component {
   state = {
-    section: "",
-    collection: "",
-    options: [],
-    options_2: [],
-    o2_disabled: true,
-    options_3: [],
-    o3_disabled: true,
-    options_4: [],
-    o4_disabled: true,
-    options_5: [],
-    o5_disabled: true,
-    reset: false,
+    data: [],
+    select_list: [],
   };
-
-  // ================================= Fetch Options Method ================================= 
-  async fetchOptions(options_no) {
-    const db = firebase.firestore();
-    var result, get_options;
-    get_options = await db
-      .collection(this.state.collection)
-      .get()
-      .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
-          result = doc.data();
-        });
-      })
-      .then(() => {
-        return result;
-      })
-      .catch(function (error) {
-        console.log("Error getting document:", error);
-      });
-    let counter = 0;
-    switch (options_no) {
-      case 1:
-        var options = Object.entries(get_options)
-          .sort()
-          .map(([key, value]) => {
-            this.setState({
-              options_2: this.state.options_2.concat({
-                value: counter,
-                label: value,
-              }),
-            });
-            counter = counter + 1;
-          });
-        break;
-      case 2:
-        var options = Object.entries(get_options)
-          .sort()
-          .map(([key, value]) => {
-            this.setState({
-              options_3: this.state.options_3.concat({
-                value: counter,
-                label: value,
-              }),
-            });
-            counter = counter + 1;
-          });
-        break;
-      case 3:
-        var options = Object.entries(get_options)
-          .sort()
-          .map(([key, value]) => {
-            this.setState({
-              options_4: this.state.options_4.concat({
-                value: counter,
-                label: value,
-              }),
-            });
-            counter = counter + 1;
-          });
-        break;
-      case 4:
-        var options = Object.entries(get_options)
-          .sort()
-          .map(([key, value]) => {
-            this.setState({
-              options_5: this.state.options_5.concat({
-                value: counter,
-                label: value,
-              }),
-            });
-            counter = counter + 1;
-          });
-        break;
-    }
-  }
-
-  // ================================= Chooese Which Options to Render Method ================================= 
-  async whichOptions(value, n) {
-    var options;
-    var selected = value.value;
-    switch (n) {
-      case "1":
-        {
-          this.setState({ o2_disabled: false });
-          if (selected == 0) {
-            await this.setState({ collection: "sub-a", section: "a" });
-          } else {
-            await this.setState({ collection: "sub-b", section: "b" });
-          }
-          this.fetchOptions(1);
-        }
-        break;
-      case "2":
-        {
-          this.setState({ o3_disabled: false });
-          if (this.state.section == "a") {
-            if (selected == 0) {
-              await this.setState({ collection: "sub-a1" });
-            } else if (selected == 1) {
-              await this.setState({ collection: "sub-a2" });
-            }
-          }
-          if (this.state.section == "b") {
-            if (selected == 0) {
-              await this.setState({ collection: "sub-b1" });
-            } else if (selected == 1) {
-              await this.setState({ collection: "sub-b2" });
-            }
-          }
-          this.fetchOptions(2);
-        }
-        break;
-      case "3":
-        {
-          this.setState({ o4_disabled: false });
-          if (this.state.section == "a") {
-            if (value.label.includes("A1")) {
-              if (selected == 0) {
-                await this.setState({ collection: "a1-1" });
-              } else if (selected == 1) {
-                await this.setState({ collection: "a1-2" });
-              }
-            } else if (value.label.includes("A2")) {
-              if (selected == 0) {
-                await this.setState({ collection: "a2-1" });
-              } else if (selected == 1) {
-                await this.setState({ collection: "a2-2" });
-              }
-            }
-          }
-          if (this.state.section == "b") {
-            if (value.label.includes("B1")) {
-              if (selected == 0) {
-                await this.setState({ collection: "b1-1" });
-              } else if (selected == 1) {
-                await this.setState({ collection: "b1-2" });
-              }
-            } else if (value.label.includes("B2")) {
-              if (selected == 0) {
-                await this.setState({ collection: "b2-1" });
-              } else if (selected == 1) {
-                await this.setState({ collection: "b2-2" });
-              }
-            }
-          }
-          this.fetchOptions(3);
-        }
-        break;
-      case "4":
-        {
-          this.setState({ o5_disabled: false });
-          if (this.state.section == "a") {
-            if (value.label.includes("A1-1")) {
-              if (selected == 0) {
-                await this.setState({ collection: "a1-1-1" });
-              } else if (selected == 1) {
-                await this.setState({ collection: "a1-1-2" });
-              }
-            } else if (value.label.includes("A1-2")) {
-              if (selected == 0) {
-                await this.setState({ collection: "a1-2-1" });
-              } else if (selected == 1) {
-                await this.setState({ collection: "a1-2-2" });
-              }
-            } else if (value.label.includes("A2-1")) {
-              if (selected == 0) {
-                await this.setState({ collection: "a2-1-1" });
-              } else if (selected == 1) {
-                await this.setState({ collection: "a2-1-2" });
-              }
-            } else if (value.label.includes("A2-2")) {
-              if (selected == 0) {
-                await this.setState({ collection: "a2-2-1" });
-              } else if (selected == 1) {
-                await this.setState({ collection: "a2-2-2" });
-              }
-            }
-          } else if (this.state.section == "b") {
-            if (value.label.includes("B1-1")) {
-              if (selected == 0) {
-                await this.setState({ collection: "b1-1-1" });
-              } else if (selected == 1) {
-                await this.setState({ collection: "b1-1-2" });
-              }
-            } else if (value.label.includes("B1-2")) {
-              if (selected == 0) {
-                await this.setState({ collection: "b1-2-1" });
-              } else if (selected == 1) {
-                await this.setState({ collection: "b1-2-2" });
-              }
-            } else if (value.label.includes("B2-1")) {
-              if (selected == 0) {
-                await this.setState({ collection: "b2-1-1" });
-              } else if (selected == 1) {
-                await this.setState({ collection: "b2-1-2" });
-              }
-            } else if (value.label.includes("B2-2")) {
-              if (selected == 0) {
-                await this.setState({ collection: "b2-2-1" });
-              } else if (selected == 1) {
-                await this.setState({ collection: "b2-2-2" });
-              }
-            }
-          }
-          this.fetchOptions(4);
-        }
-        break;
-      case "5":
-        this.setState({ reset: true });
-    }
-  }
-
-
-  // ================================= Fetch Initial Select Data Method ================================= 
-  async fetchData() {
+  async getInitialCollection() {
+    var options_array = [];
     const db = firebase.firestore();
     var options, initial_options;
-    options = await db
+    initial_options = await db
       .collection("categories")
       .get()
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
-          initial_options = doc.data();
+          options = doc.data();
         });
       })
       .then(() => {
-        return initial_options;
+        return Object.entries(options)
+          .sort()
+          .map(([key, value]) => {
+            options_array.push(value);
+          });
       })
       .catch(function (error) {
         console.log("Error getting document:", error);
       });
-    return options;
+    return options_array;
   }
-  async componentDidMount() {
-    var result = await this.fetchData();
 
-    let counter = 0;
-    var options = Object.entries(result)
-      .sort()
-      .map(([key, value]) => {
-        this.setState({
-          options: this.state.options.concat({
-            value: counter,
-            label: value,
-          }),
-        });
-        counter = counter + 1;
+  async getCollection(collection) {
+    const db = firebase.firestore();
+    var options_array = [];
+    var options = [];
+    var get_options = await db
+      .collection(collection)
+      .get()
+      .then(function (querySnapshot) {
+        if (querySnapshot.size == 0) {
+          return -1;
+        } else {
+          querySnapshot.forEach(function (doc) {
+            options = doc.data();
+          });
+        }
+      })
+      .then(() => {
+        if (options != []) {
+          return Object.entries(options)
+            .sort()
+            .map(([key, value]) => {
+              options_array.push(value);
+            });
+        } else return -1;
+      })
+      .catch(function (error) {
+        console.log("Error getting document:", error);
       });
+    if (get_options.length == 0) {
+      return -1
+    }
+    else {
+      return options_array;
+    }
   }
 
+  async getDocument(document) {
+    var options_array = [];
+    const db = firebase.firestore();
+    const collectionRef = await db.collection("new_categories").doc(document).get().then((snapshot) => {
+      Object.values(snapshot.data())
+        .sort()
+        .map((value) => {
+          options_array.push(value);
+        });
+    }).catch(function (error) {
+      console.log("Error getting document:", error);
+      return -1;
+    });
 
-  // ================================= Handle Reset Method ================================= 
-  handleReset = () => {
-    this.setState({
-      section: "",
-      collection: "",
-      options_2: [],
-      o2_disabled: true,
-      options_3: [],
-      o3_disabled: true,
-      options_4: [],
-      o4_disabled: true,
-      options_5: [],
-      o5_disabled: true,
-      reset: false,
-    })
+    return options_array
   }
 
+  async addCollection(collection) {
+    const db = firebase.firestore();
+    const data = {
+      1: collection + "-1",
+      2: collection + "-2",
+    };
+    var new_collection = await db
+      .collection("new_categories")
+      .doc(collection)
+      .set(data);
+    new_collection = await this.getDocument(collection);
+    return new_collection;
+  }
 
-  // ================================= Render Method ================================= 
+  _handleSelect = (event) => {
+    this.handleSelect(event.target.value);
+  };
+  async handleSelect(value) {
+    var selected = value;
+    var options = await this.getCollection(selected.toLowerCase());
+    if (options == -1) {
+      options = await this.getDocument(selected.toLowerCase());
+      if (options.length == 0) {
+        options = await this.addCollection(selected.toLowerCase());
+      }
+    }
+    var new_list = this.state.select_list;
+    new_list.push({ options: options });
+    this.setState({ select_list: new_list });
+  }
+
+  renderNewOption = function (option) {
+    return <option>{option}</option>;
+  };
+
+  async componentDidMount() {
+    // if (this.state.data.length == 0) {
+    this.setState({ data: await this.getInitialCollection() });
+    // }
+
+  }
+
   render() {
     return (
       <Fragment>
-        <div style={{ margin: "20px" }}>
-          <Select
-            value={this.state.options.value}
-            options={this.state.options}
-            onChange={(value) => this.whichOptions(value, "1")}
-          />
-        </div>
-        {this.state.o2_disabled ? null : (
-          <div style={{ margin: "20px" }}>
-            <Select
-              value={this.state.options_2.value}
-              options={this.state.options_2}
-              isDisabled={this.state.o2_disabled}
-              onChange={(value) => this.whichOptions(value, "2")}
-            />
-          </div>
-        )}
-        {this.state.o3_disabled ? null : (
-          <div style={{ margin: "20px" }}>
-            <Select
-              value={this.state.options_3.value}
-              options={this.state.options_3}
-              isDisabled={this.state.o3_disabled}
-              onChange={(value) => this.whichOptions(value, "3")}
-            />
-          </div>
-        )}
-        {this.state.o4_disabled ? null : (
-          <div style={{ margin: "20px" }}>
-            <Select
-              value={this.state.options_4.value}
-              options={this.state.options_4}
-              isDisabled={this.state.o4_disabled}
-              onChange={(value) => this.whichOptions(value, "4")}
-            />
-          </div>
-        )}
-        {this.state.o5_disabled ? null : (
-          <div style={{ margin: "20px" }}>
-            <Select
-              value={this.state.options_5.value}
-              options={this.state.options_5}
-              isDisabled={this.state.o5_disabled}
-              onChange={(value) => this.whichOptions(value, "5")}
-            />
-          </div>
-        )}
+        <div
+          style={{
+            display: "flex",
+            margin: "auto",
+            width: "60%",
+            height: window.innerHeight,
+            backgroundColor: "#7bdcb5",
+          }}
+        >
 
-        {this.state.reset ? (
-          <Button
-            variant="danger"
-            style={{ display: "flex", margin: "auto" }}
-            onClick={this.handleReset}
+          <ListGroup
+            style={{
+              display: "flex",
+              margin: "auto",
+              width: "100%"
+            }}
           >
-            Reset
-          </Button>
-        ) : null}
+            <ListGroup.Item style={{ backgroundColor: "inherit", border: "0px" }}><select
+              className="form-control"
+              onChange={this._handleSelect}
+            >
+              <option disabled selected>Select...</option>
+              {this.state.data.map(this.renderNewOption)}
+            </select>
+            </ListGroup.Item>
+            {this.state.select_list.map((index) => {
+              return (
+                <ListGroup.Item style={{ backgroundColor: "#7bdcb5", border: "0px" }}>
+                  <select
+
+                    className="form-control"
+                    onChange={this._handleSelect}
+                  >
+                    <option disabled selected>Select...</option>
+                    <option>{index.options[0]}</option>
+                    <option>{index.options[1]}</option>
+                  </select>
+                </ListGroup.Item>)
+            })}
+          </ListGroup>
+        </div>
       </Fragment>
     );
   }
