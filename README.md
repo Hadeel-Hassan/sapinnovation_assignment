@@ -13,6 +13,3 @@ This project was build with [Create React App](https://github.com/facebook/creat
 The project is published to GitHub Pages.
 You can run it at [https://hadeel-hassan.github.io/sapinnovation_assignment/](https://hadeel-hassan.github.io/sapinnovation_assignment/).
 
-## Extra Notes
-you can find the data that been stored in Firebase in `data.json` file.
-
